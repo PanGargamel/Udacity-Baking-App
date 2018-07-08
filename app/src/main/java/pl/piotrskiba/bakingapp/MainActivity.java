@@ -1,8 +1,10 @@
 package pl.piotrskiba.bakingapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -58,8 +60,15 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     }
 
     private void setupRecyclerView(List<Recipe> recipeList){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecipeList.setLayoutManager(layoutManager);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            mRecipeList.setLayoutManager(layoutManager);
+        }
+        else {
+            GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+            mRecipeList.setLayoutManager(layoutManager);
+        }
+
         mRecipeList.setHasFixedSize(true);
 
         mRecipeListAdapter = new RecipeListAdapter(recipeList, this);
