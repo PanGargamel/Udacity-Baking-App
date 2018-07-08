@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- recipe_list_item.xml -->
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="recipe_name_text_size">24sp</dimen>
+    <dimen name="recipe_ingredients_text_size">12sp</dimen>
+    <dimen name="recipe_ingredients_padding">8dp</dimen>
+
+</resources>
