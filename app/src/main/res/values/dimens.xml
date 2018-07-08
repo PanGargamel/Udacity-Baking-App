@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- cards layout -->
+    <dimen name="card_margin">6dp</dimen>
+    <dimen name="card_content_margin">16dp</dimen>
+
     <!-- recipe_list_item.xml -->
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="card_padding">16dp</dimen>
     <dimen name="recipe_name_text_size">24sp</dimen>
     <dimen name="recipe_ingredients_text_size">12sp</dimen>
-    <dimen name="recipe_ingredients_padding">8dp</dimen>
+    <dimen name="recipe_ingredients_margin">8dp</dimen>
+
+    <!-- step_list_item.xml -->
+    <dimen name="step_title_text_size">20sp</dimen>
+    <dimen name="step_title_margin">8dp</dimen>
 
 </resources>

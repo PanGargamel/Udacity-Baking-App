@@ -1,5 +1,6 @@
 package pl.piotrskiba.bakingapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.piotrskiba.bakingapp.adapters.RecipeListAdapter;
 import pl.piotrskiba.bakingapp.interfaces.GetDataService;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.network.RetrofitClientInstance;
@@ -17,11 +19,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeListAdapter.ListItemClickListener {
 
     @BindView(R.id.rv_recipes)
     RecyclerView mRecipeList;
     private RecipeListAdapter mRecipeListAdapter;
+
+    public final static String KEY_RECIPE = "Recipe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,14 @@ public class MainActivity extends AppCompatActivity {
         mRecipeList.setLayoutManager(layoutManager);
         mRecipeList.setHasFixedSize(true);
 
-        mRecipeListAdapter = new RecipeListAdapter(recipeList);
+        mRecipeListAdapter = new RecipeListAdapter(recipeList, this);
         mRecipeList.setAdapter(mRecipeListAdapter);
+    }
+
+    @Override
+    public void onClick(int index) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(KEY_RECIPE, mRecipeListAdapter.recipeList.get(index));
+        startActivity(intent);
     }
 }

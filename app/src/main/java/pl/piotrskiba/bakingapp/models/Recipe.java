@@ -1,14 +1,17 @@
 package pl.piotrskiba.bakingapp.models;
 
-public class Recipe {
+import java.io.Serializable;
+import java.util.List;
+
+public class Recipe implements Serializable {
     private int id;
     private String name;
-    private Ingredient[] ingredients;
-    private Step[] steps;
+    private List<Ingredient> ingredients;
+    private List<Step> steps;
     private int servings;
     private String image;
 
-    public Recipe(int id, String name, Ingredient[] ingredients, Step[] steps, int servings, String image){
+    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image){
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -25,12 +28,16 @@ public class Recipe {
         return name;
     }
 
-    public Ingredient[] getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public Step[] getSteps() {
+    public List<Step> getSteps() {
         return steps;
+    }
+
+    public void addStep(Step step) {
+        steps.add(0, step);
     }
 
     public int getServings() {

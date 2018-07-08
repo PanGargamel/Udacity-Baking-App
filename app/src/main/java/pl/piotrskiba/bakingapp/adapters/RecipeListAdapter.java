@@ -1,9 +1,8 @@
-package pl.piotrskiba.bakingapp;
+package pl.piotrskiba.bakingapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.piotrskiba.bakingapp.R;
 import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList;
+    public List<Recipe> recipeList;
 
-    public RecipeListAdapter(List<Recipe> recipeList){
+    final private ListItemClickListener mOnClickListener;
+
+    public RecipeListAdapter(List<Recipe> recipeList, ListItemClickListener clickListener){
         this.recipeList = recipeList;
+        this.mOnClickListener = clickListener;
     }
 
     @NonNull
@@ -44,10 +47,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         // set recipe ingredients
         StringBuilder stringBuilder = new StringBuilder();
-        Ingredient[] ingredients = recipeList.get(position).getIngredients();
-        for(int i = 0; i < ingredients.length; i++){
-            stringBuilder.append(ingredients[i].getIngredient());
-            if(i < ingredients.length-1)
+        List<Ingredient> ingredients = recipeList.get(position).getIngredients();
+        for(int i = 0; i < ingredients.size(); i++){
+            stringBuilder.append(ingredients.get(i).getIngredient());
+            if(i < ingredients.size()-1)
                 stringBuilder.append(", ");
         }
 
@@ -59,7 +62,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         return recipeList.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
+    class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.tv_recipe_name)
         TextView recipeNameTextView;
@@ -67,10 +70,21 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         @BindView(R.id.tv_recipe_ingredients)
         TextView recipeIngredientsTextView;
 
-        public RecipeViewHolder(View itemView) {
+        RecipeViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            mOnClickListener.onClick(getAdapterPosition());
+        }
+    }
+
+    public interface ListItemClickListener{
+        void onClick(int index);
     }
 }

@@ -1,6 +1,8 @@
 package pl.piotrskiba.bakingapp.models;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
 
     private float quantity;
     private String measure;
