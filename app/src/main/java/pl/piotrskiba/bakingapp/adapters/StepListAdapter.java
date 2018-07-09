@@ -24,9 +24,13 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
     Context context;
     List<Step> steps;
 
-    public StepListAdapter(Context context, List<Step> steps){
+    final private StepListItemClickListener mOnClickListener;
+
+
+    public StepListAdapter(Context context, List<Step> steps, StepListItemClickListener listener){
         this.context = context;
         this.steps = steps;
+        this.mOnClickListener = listener;
     }
 
     @NonNull
@@ -52,7 +56,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         return steps.size();
     }
 
-    class StepViewHolder extends RecyclerView.ViewHolder{
+    class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.tv_step_title)
         TextView stepTitleTextView;
@@ -61,6 +65,17 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            mOnClickListener.onClick(getAdapterPosition());
+        }
+    }
+
+    public interface StepListItemClickListener{
+        void onClick(int index);
     }
 }
