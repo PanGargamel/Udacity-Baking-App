@@ -1,6 +1,7 @@
 package pl.piotrskiba.bakingapp;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,7 @@ import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
 
-public class DetailActivity extends AppCompatActivity implements StepListAdapter.StepListItemClickListener {
-
-    @BindView(R.id.rv_steps)
-    RecyclerView mStepList;
-
-    private StepListAdapter mStepListAdapter;
+public class DetailActivity extends AppCompatActivity {
 
     Recipe mRecipe;
 
@@ -44,7 +40,6 @@ public class DetailActivity extends AppCompatActivity implements StepListAdapter
             for(int i = 0; i < mRecipe.getIngredients().size(); i++){
                 Ingredient ingredient = mRecipe.getIngredients().get(i);
 
-
                 // convert numbers like 5.0 to 5
                 String quantity;
                 if(ingredient.getQuantity() == (int) ingredient.getQuantity())
@@ -60,20 +55,19 @@ public class DetailActivity extends AppCompatActivity implements StepListAdapter
             Step step = new Step(-1, getString(R.string.ingredients), stepDescription.toString(), "", "");
             mRecipe.addStep(step);
 
-            setupRecyclerView(mRecipe.getSteps());
+            // instantiate fragment with step list
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (savedInstanceState == null) {
+                StepListFragment stepListFragment = new StepListFragment();
+                stepListFragment.setStepList(mRecipe.getSteps());
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_list_container, stepListFragment)
+                        .commit();
+            }
         }
     }
 
-    private void setupRecyclerView(List<Step> stepList){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mStepList.setLayoutManager(layoutManager);
-        mStepList.setHasFixedSize(true);
-
-        mStepListAdapter = new StepListAdapter(this, stepList, this);
-        mStepList.setAdapter(mStepListAdapter);
-    }
-
-    @Override
     public void onClick(int index) {
         Intent intent = new Intent(this, StepDetailActivity.class);
         intent.putExtra(MainActivity.KEY_RECIPE, mRecipe);
