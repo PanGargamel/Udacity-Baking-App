@@ -2,6 +2,7 @@ package pl.piotrskiba.bakingapp.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
 
     Context context;
     List<Step> steps;
+    int selectedItem = 0;
 
     final private StepListItemClickListener mOnClickListener;
 
@@ -49,6 +51,13 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         String title = steps.get(position).getShortDescription();
         String text = String.format(context.getString(R.string.step_format), position+1, title);
         holder.stepTitleTextView.setText(text);
+
+        if(position == selectedItem){
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+        }
+        else{
+            holder.itemView.setBackgroundColor(Color.rgb(255, 255, 255));
+        }
     }
 
     @Override
@@ -75,6 +84,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         @Override
         public void onClick(View v) {
             mOnClickListener.onClick(getAdapterPosition());
+            selectedItem = getAdapterPosition();
+            notifyDataSetChanged();
         }
     }
 

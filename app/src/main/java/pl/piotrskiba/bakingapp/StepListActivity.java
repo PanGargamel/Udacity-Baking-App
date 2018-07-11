@@ -13,6 +13,9 @@ import pl.piotrskiba.bakingapp.models.Step;
 public class StepListActivity extends AppCompatActivity {
 
     Recipe mRecipe;
+    Boolean mTwoPane = false;
+
+    int selectedStep = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +24,15 @@ public class StepListActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        if(findViewById(R.id.two_pane_layout) != null)
+            mTwoPane = true;
+
         Intent parentIntent = getIntent();
         if(parentIntent.hasExtra(MainActivity.KEY_RECIPE)){
             mRecipe = (Recipe) parentIntent.getSerializableExtra(MainActivity.KEY_RECIPE);
-            getSupportActionBar().setTitle(mRecipe.getName());
+
+            if(!mTwoPane)
+                getSupportActionBar().setTitle(mRecipe.getName());
 
             // check if fragment is not already instantiated
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -62,12 +70,45 @@ public class StepListActivity extends AppCompatActivity {
                         .commit();
             }
         }
+
+        if(mTwoPane){
+            Step step = mRecipe.getSteps().get(selectedStep);
+
+            getSupportActionBar().setTitle(mRecipe.getName() + " - " + step.getShortDescription());
+
+
+            // instantiate fragment with step details
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            StepDetailFragment stepDetailFragment = (StepDetailFragment) fragmentManager.findFragmentByTag(StepDetailFragment.TAG);
+            if(stepDetailFragment == null) {
+                stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setStep(step);
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_detail_container, stepDetailFragment, StepDetailFragment.TAG)
+                        .commit();
+            }
+        }
     }
 
     public void onClick(int index) {
-        Intent intent = new Intent(this, StepDetailActivity.class);
-        intent.putExtra(MainActivity.KEY_RECIPE, mRecipe);
-        intent.putExtra(Intent.EXTRA_INDEX, index);
-        startActivity(intent);
+        selectedStep = index;
+
+        if(mTwoPane){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            StepDetailFragment stepDetailFragment = (StepDetailFragment) fragmentManager.findFragmentByTag(StepDetailFragment.TAG);
+            if(stepDetailFragment != null) {
+                stepDetailFragment.setStep(mRecipe.getSteps().get(selectedStep));
+                stepDetailFragment.updateUI();
+            }
+        }
+        else {
+            Intent intent = new Intent(this, StepDetailActivity.class);
+            intent.putExtra(MainActivity.KEY_RECIPE, mRecipe);
+            intent.putExtra(Intent.EXTRA_INDEX, index);
+            startActivity(intent);
+        }
     }
 }

@@ -36,12 +36,16 @@ public class StepDetailFragment extends Fragment {
 
         setRetainInstance(true);
 
-        mStepDescriptionTextView.setText(mStep.getDescription());
+        updateUI();
 
         return rootView;
     }
 
     public void setStep(Step step){
         this.mStep = step;
+    }
+
+    public void updateUI(){
+        mStepDescriptionTextView.setText(mStep.getDescription());
     }
 }
