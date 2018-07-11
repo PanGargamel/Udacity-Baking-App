@@ -1,6 +1,5 @@
 package pl.piotrskiba.bakingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,6 +55,6 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     @Override
     public void onClick(int index) {
-        ((DetailActivity) getActivity()).onClick(index);
+        ((StepListActivity) getActivity()).onClick(index);
     }
 }

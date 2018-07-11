@@ -21,12 +21,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".StepListActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".StepDetailActivity"
-            android:parentActivityName=".DetailActivity"
+            android:parentActivityName=".StepListActivity"
             android:launchMode="singleTop" />
     </application>
 

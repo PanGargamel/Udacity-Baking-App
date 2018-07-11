@@ -10,7 +10,7 @@ import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
 
-public class DetailActivity extends AppCompatActivity {
+public class StepListActivity extends AppCompatActivity {
 
     Recipe mRecipe;
 
