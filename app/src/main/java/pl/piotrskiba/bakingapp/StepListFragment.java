@@ -25,6 +25,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     private List<Step> stepList;
 
+    public final static String TAG = "FRAGMENT_STEP_LIST";
+
     public StepListFragment(){
 
     }
@@ -35,6 +37,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
 
         ButterKnife.bind(this, rootView);
+
+        setRetainInstance(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mStepList.setLayoutManager(layoutManager);
