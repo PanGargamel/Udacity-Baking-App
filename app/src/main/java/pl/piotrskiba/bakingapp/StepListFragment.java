@@ -26,6 +26,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     public final static String TAG = "FRAGMENT_STEP_LIST";
 
+    StepListAdapter stepListAdapter;
+
     public StepListFragment(){
 
     }
@@ -43,7 +45,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
         mStepList.setLayoutManager(layoutManager);
         mStepList.setHasFixedSize(true);
 
-        StepListAdapter stepListAdapter = new StepListAdapter(getContext(), stepList, this);
+        stepListAdapter = new StepListAdapter(getContext(), stepList, this);
         mStepList.setAdapter(stepListAdapter);
 
         return rootView;
@@ -56,5 +58,6 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     @Override
     public void onClick(int index) {
         ((StepListActivity) getActivity()).onClick(index);
+        StepListActivity.selectedStep = index;
     }
 }

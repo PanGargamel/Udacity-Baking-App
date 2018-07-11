@@ -13,9 +13,11 @@ import pl.piotrskiba.bakingapp.models.Step;
 public class StepListActivity extends AppCompatActivity {
 
     Recipe mRecipe;
-    Boolean mTwoPane = false;
+    public static Boolean mTwoPane = false;
 
-    int selectedStep = 0;
+    public static int selectedStep = 0;
+
+    final static String KEY_SELECTED_STEP = "selected_step";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,11 @@ public class StepListActivity extends AppCompatActivity {
             }
         }
 
+        // load selected position after rotation change
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY_SELECTED_STEP)){
+            selectedStep = savedInstanceState.getInt(KEY_SELECTED_STEP);
+        }
+
         if(mTwoPane){
             Step step = mRecipe.getSteps().get(selectedStep);
 
@@ -90,6 +97,13 @@ public class StepListActivity extends AppCompatActivity {
                         .commit();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(KEY_SELECTED_STEP, selectedStep);
     }
 
     public void onClick(int index) {
