@@ -26,11 +26,13 @@ import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
 import pl.piotrskiba.bakingapp.models.Step;
 
 public class StepDetailFragment extends Fragment {
 
     @BindView(R.id.tv_step_description)
+    @Nullable
     TextView mStepDescriptionTextView;
 
     SimpleExoPlayer mStepVideoPlayer;
@@ -65,15 +67,16 @@ public class StepDetailFragment extends Fragment {
     }
 
     public void updateUI(){
-        mStepDescriptionTextView.setText(mStep.getDescription());
+        if(mStepDescriptionTextView != null)
+            mStepDescriptionTextView.setText(mStep.getDescription());
 
         if(mStep.getVideoUrl().length() != 0) {
             initializeVideoPlayer(Uri.parse(mStep.getVideoUrl()));
+            mStepVideoPlayerView.setVisibility(View.VISIBLE);
         }
         else{
-            // there's no video, so remove the player
-            ViewGroup parent = (ViewGroup) mStepVideoPlayerView.getParent();
-            parent.removeView(mStepVideoPlayerView);
+            // there's no video, so hide the player
+            mStepVideoPlayerView.setVisibility(View.GONE);
         }
     }
 
@@ -97,8 +100,14 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         releasePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 }
