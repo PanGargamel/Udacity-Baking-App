@@ -14,6 +14,7 @@
     <dimen name="step_title_text_size">20sp</dimen>
     <dimen name="step_title_margin">8dp</dimen>
 
-    <!-- activity_step_detail.xml -->
+    <!-- fragment_step_detail.xml -->
     <dimen name="step_description_margin">8dp</dimen>
+    <dimen name="video_height">204dp</dimen>
 </resources>

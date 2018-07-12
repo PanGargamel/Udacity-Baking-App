@@ -1,20 +1,22 @@
 package pl.piotrskiba.bakingapp.models;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 public class Step implements Serializable {
     private int id;
     private String shortDescription;
     private String description;
-    private String videoUrl;
-    private String thumbnailUrl;
+    private String videoURL;
+    private String thumbnailURL;
 
-    public Step(int id, String shortDescription, String description, String videoUrl, String thumbnailUrl){
+    public Step(int id, String shortDescription, String description, String videoURL, String thumbnailURL){
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
-        this.videoUrl = videoUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
     public int getId(){
@@ -30,10 +32,10 @@ public class Step implements Serializable {
     }
 
     public String getVideoUrl(){
-        return videoUrl;
+        return videoURL;
     }
 
     public String getThumbnailUrl(){
-        return thumbnailUrl;
+        return thumbnailURL;
     }
 }
