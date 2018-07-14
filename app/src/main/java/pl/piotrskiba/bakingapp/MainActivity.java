@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.piotrskiba.bakingapp.adapters.RecipeListAdapter;
 import pl.piotrskiba.bakingapp.interfaces.GetDataService;
-import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.network.RetrofitClientInstance;
 import retrofit2.Call;
@@ -68,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                // TODO: move string to strings.xml
-                Toast.makeText(MainActivity.this, "Error occurred. Please try again later.\n" + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                Log.w(getClass().getSimpleName(), t.getMessage());
             }
         });
     }

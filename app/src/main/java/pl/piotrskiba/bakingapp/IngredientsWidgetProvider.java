@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.JsonReader;
 import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
 
-import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.utils.StringUtils;
 

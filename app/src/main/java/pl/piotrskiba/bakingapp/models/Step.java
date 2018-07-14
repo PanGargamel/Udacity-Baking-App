@@ -1,7 +1,5 @@
 package pl.piotrskiba.bakingapp.models;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 public class Step implements Serializable {

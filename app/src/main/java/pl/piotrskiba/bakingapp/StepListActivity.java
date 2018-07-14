@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import butterknife.ButterKnife;
-import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
 import pl.piotrskiba.bakingapp.utils.StringUtils;

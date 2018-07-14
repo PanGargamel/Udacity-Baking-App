@@ -1,7 +1,6 @@
 package pl.piotrskiba.bakingapp.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +13,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.piotrskiba.bakingapp.MainActivity;
 import pl.piotrskiba.bakingapp.R;
 import pl.piotrskiba.bakingapp.StepListActivity;
 import pl.piotrskiba.bakingapp.models.Step;
-
-import static android.support.v4.content.res.TypedArrayUtils.getString;
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolder> {
 
