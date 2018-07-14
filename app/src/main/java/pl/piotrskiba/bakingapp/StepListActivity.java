@@ -9,6 +9,7 @@ import butterknife.ButterKnife;
 import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
+import pl.piotrskiba.bakingapp.utils.StringUtils;
 
 public class StepListActivity extends AppCompatActivity {
 
@@ -43,24 +44,7 @@ public class StepListActivity extends AppCompatActivity {
             if(stepListFragment == null) {
 
                 // add step with ingredient list to the beginning
-                StringBuilder stepDescription = new StringBuilder();
-                stepDescription.append(getString(R.string.ingredients) + ":\n");
-                for(int i = 0; i < mRecipe.getIngredients().size(); i++){
-                    Ingredient ingredient = mRecipe.getIngredients().get(i);
-
-                    // convert numbers like 5.0 to 5
-                    String quantity;
-                    if(ingredient.getQuantity() == (int) ingredient.getQuantity())
-                        quantity = String.format("%d",(int) ingredient.getQuantity());
-                    else
-                        quantity = String.format("%s", ingredient.getQuantity());
-
-                    stepDescription.append(" - " + ingredient.getIngredient() + " (" + quantity + " " + ingredient.getMeasure() + ")");
-                    if(i < mRecipe.getIngredients().size() - 1)
-                        stepDescription.append("\n");
-                }
-
-                Step step = new Step(-1, getString(R.string.ingredients), stepDescription.toString(), "", "");
+                Step step = new Step(-1, getString(R.string.ingredients), new StringUtils().getIngredientsList(this, mRecipe), "", "");
                 mRecipe.addStep(step);
 
                 // instantiate fragment with step list

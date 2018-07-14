@@ -1,13 +1,20 @@
 package pl.piotrskiba.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -15,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.piotrskiba.bakingapp.adapters.RecipeListAdapter;
 import pl.piotrskiba.bakingapp.interfaces.GetDataService;
+import pl.piotrskiba.bakingapp.models.Ingredient;
 import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.network.RetrofitClientInstance;
 import retrofit2.Call;
@@ -27,7 +35,13 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
     RecyclerView mRecipeList;
     private RecipeListAdapter mRecipeListAdapter;
 
-    public final static String KEY_RECIPE = "Recipe";
+    public final static String KEY_RECIPE = "recipe";
+    public final static String KEY_WIDGET_ID = "widget_id";
+    public final static String ACTION_SELECT_RECIPE = "select_recipe";
+
+    private List<Recipe> mRecipes;
+    private boolean mRecipeSelection;
+    private int mWidgetId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                setupRecyclerView(response.body());
+                mRecipes = response.body();
+                setupRecyclerView(mRecipes);
             }
 
             @Override
@@ -57,6 +72,28 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
                 Toast.makeText(MainActivity.this, "Error occurred. Please try again later.\n" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        this.setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // check if the app was launched using widget for a recipe selection
+        Intent parentIntent = getIntent();
+        mRecipeSelection = parentIntent.getBooleanExtra(ACTION_SELECT_RECIPE, false);
+        mWidgetId = parentIntent.getIntExtra(KEY_WIDGET_ID, 0);
+
+        if(mRecipeSelection){
+            setTitle(getString(R.string.select_recipe));
+        }
+        else{
+            setTitle(getString(R.string.app_name));
+        }
     }
 
     private void setupRecyclerView(List<Recipe> recipeList){
@@ -77,8 +114,29 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
     @Override
     public void onClick(int index) {
-        Intent intent = new Intent(this, StepListActivity.class);
-        intent.putExtra(KEY_RECIPE, mRecipeListAdapter.recipeList.get(index));
-        startActivity(intent);
+        if(!mRecipeSelection) {
+            Intent intent = new Intent(this, StepListActivity.class);
+            intent.putExtra(KEY_RECIPE, mRecipeListAdapter.recipeList.get(index));
+            startActivity(intent);
+        }
+        else{
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            Gson gson = new Gson();
+            String json = gson.toJson(mRecipes.get(index));
+            editor.putString(Integer.toString(mWidgetId), json);
+            editor.commit();
+
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+            int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, IngredientsWidgetProvider.class));
+
+            for(int i = 0; i < widgetIds.length; i++){
+                IngredientsWidgetProvider.updateAppWidget(this, appWidgetManager, widgetIds[i]);
+            }
+
+            finish();
+        }
     }
 }
