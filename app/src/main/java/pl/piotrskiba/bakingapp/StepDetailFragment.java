@@ -1,5 +1,6 @@
 package pl.piotrskiba.bakingapp;
 
+import android.app.ActionBar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -25,9 +27,10 @@ import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
 
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.tv_step_description)
     @Nullable
@@ -38,7 +41,17 @@ public class StepDetailFragment extends Fragment {
     @BindView(R.id.step_video)
     SimpleExoPlayerView mStepVideoPlayerView;
 
+    @BindView(R.id.button_prev)
+    Button mPreviousButton;
+
+    @BindView(R.id.button_next)
+    Button mNextButton;
+
+    Recipe mRecipe;
+    int mStepIndex;
     Step mStep;
+
+    android.support.v7.app.ActionBar mSupportActionBar;
 
     public final static String TAG = "FRAGMENT_STEP_DETAIL";
 
@@ -57,14 +70,27 @@ public class StepDetailFragment extends Fragment {
 
         updateUI();
 
+        mPreviousButton.setOnClickListener(this);
+        mNextButton.setOnClickListener(this);
+
         return rootView;
     }
 
-    public void setStep(Step step){
-        this.mStep = step;
+    public void setRecipe(Recipe recipe){
+        this.mRecipe = recipe;
+    }
+
+    public void setStepIndex(int index){
+        this.mStepIndex = index;
+    }
+
+    public void setSupportActionBar(android.support.v7.app.ActionBar supportActionBar){
+        this.mSupportActionBar = supportActionBar;
     }
 
     public void updateUI(){
+        mStep = mRecipe.getSteps().get(mStepIndex);
+
         if(mStepDescriptionTextView != null)
             mStepDescriptionTextView.setText(mStep.getDescription());
 
@@ -75,6 +101,22 @@ public class StepDetailFragment extends Fragment {
         else{
             // there's no video, so hide the player
             mStepVideoPlayerView.setVisibility(View.GONE);
+        }
+
+        mSupportActionBar.setTitle(mRecipe.getName() + " - " + mStep.getShortDescription());
+
+        if(mStepIndex == 0) {
+            mPreviousButton.setEnabled(false);
+        }
+        else {
+            mPreviousButton.setEnabled(true);
+        }
+
+        if(mStepIndex == mRecipe.getSteps().size()-1) {
+            mNextButton.setEnabled(false);
+        }
+        else {
+            mNextButton.setEnabled(true);
         }
     }
 
@@ -107,5 +149,17 @@ public class StepDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.button_prev){
+            setStepIndex(mStepIndex - 1);
+            updateUI();
+        }
+        else if(v.getId() == R.id.button_next){
+            setStepIndex(mStepIndex + 1);
+            updateUI();
+        }
     }
 }

@@ -9,6 +9,7 @@
     <dimen name="recipe_name_text_size">24sp</dimen>
     <dimen name="recipe_ingredients_text_size">12sp</dimen>
     <dimen name="recipe_ingredients_margin">8dp</dimen>
+    <dimen name="recipe_buttons_margin">8dp</dimen>
 
     <!-- step_list_item.xml -->
     <dimen name="step_title_text_size">20sp</dimen>
@@ -17,6 +18,7 @@
     <!-- fragment_step_detail.xml -->
     <dimen name="step_description_margin">8dp</dimen>
     <dimen name="video_height">204dp</dimen>
+    <dimen name="button_width">140dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

@@ -18,10 +18,8 @@ public class StepDetailActivity extends AppCompatActivity {
         Intent parentIntent = getIntent();
         if(parentIntent.hasExtra(MainActivity.KEY_RECIPE) && parentIntent.hasExtra(Intent.EXTRA_INDEX)){
             Recipe recipe = (Recipe) parentIntent.getSerializableExtra(MainActivity.KEY_RECIPE);
-            Step step = recipe.getSteps().get(parentIntent.getIntExtra(Intent.EXTRA_INDEX, 0));
-
-            getSupportActionBar().setTitle(recipe.getName() + " - " + step.getShortDescription());
-
+            int index = parentIntent.getIntExtra(Intent.EXTRA_INDEX, 0);
+            Step step = recipe.getSteps().get(index);
 
             // instantiate fragment with step details
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -29,7 +27,9 @@ public class StepDetailActivity extends AppCompatActivity {
             StepDetailFragment stepDetailFragment = (StepDetailFragment) fragmentManager.findFragmentByTag(StepDetailFragment.TAG);
             if(stepDetailFragment == null) {
                 stepDetailFragment = new StepDetailFragment();
-                stepDetailFragment.setStep(step);
+                stepDetailFragment.setRecipe(recipe);
+                stepDetailFragment.setStepIndex(index);
+                stepDetailFragment.setSupportActionBar(getSupportActionBar());
 
                 fragmentManager.beginTransaction()
                         .add(R.id.step_detail_container, stepDetailFragment, StepDetailFragment.TAG)

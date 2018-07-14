@@ -64,16 +64,15 @@ public class StepListActivity extends AppCompatActivity {
         if(mTwoPane){
             Step step = mRecipe.getSteps().get(selectedStep);
 
-            getSupportActionBar().setTitle(mRecipe.getName() + " - " + step.getShortDescription());
-
-
             // instantiate fragment with step details
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             StepDetailFragment stepDetailFragment = (StepDetailFragment) fragmentManager.findFragmentByTag(StepDetailFragment.TAG);
             if(stepDetailFragment == null) {
                 stepDetailFragment = new StepDetailFragment();
-                stepDetailFragment.setStep(step);
+                stepDetailFragment.setRecipe(mRecipe);
+                stepDetailFragment.setStepIndex(selectedStep);
+                stepDetailFragment.setSupportActionBar(getSupportActionBar());
 
                 fragmentManager.beginTransaction()
                         .add(R.id.step_detail_container, stepDetailFragment, StepDetailFragment.TAG)
@@ -97,7 +96,8 @@ public class StepListActivity extends AppCompatActivity {
 
             StepDetailFragment stepDetailFragment = (StepDetailFragment) fragmentManager.findFragmentByTag(StepDetailFragment.TAG);
             if(stepDetailFragment != null) {
-                stepDetailFragment.setStep(mRecipe.getSteps().get(selectedStep));
+                stepDetailFragment.setRecipe(mRecipe);
+                stepDetailFragment.setStepIndex(selectedStep);
                 stepDetailFragment.updateUI();
             }
         }

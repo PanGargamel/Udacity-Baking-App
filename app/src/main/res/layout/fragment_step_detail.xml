@@ -17,4 +17,30 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/step_description_margin"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/recipe_buttons_margin"
+        android:layout_marginLeft="@dimen/recipe_buttons_margin"
+        android:layout_marginEnd="@dimen/recipe_buttons_margin"
+        android:layout_marginRight="@dimen/recipe_buttons_margin"
+        android:layout_marginBottom="@dimen/recipe_buttons_margin">
+
+        <Button
+            android:id="@+id/button_prev"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:text="@string/previous"
+            android:layout_alignParentBottom="true"/>
+        <Button
+            android:id="@+id/button_next"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
 </LinearLayout>
