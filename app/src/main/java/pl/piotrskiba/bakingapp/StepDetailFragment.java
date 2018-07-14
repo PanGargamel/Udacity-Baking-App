@@ -42,9 +42,11 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     SimpleExoPlayerView mStepVideoPlayerView;
 
     @BindView(R.id.button_prev)
+    @Nullable
     Button mPreviousButton;
 
     @BindView(R.id.button_next)
+    @Nullable
     Button mNextButton;
 
     Recipe mRecipe;
@@ -70,8 +72,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         updateUI();
 
-        mPreviousButton.setOnClickListener(this);
-        mNextButton.setOnClickListener(this);
+        if (mPreviousButton != null) {
+            mPreviousButton.setOnClickListener(this);
+            mNextButton.setOnClickListener(this);
+        }
 
         return rootView;
     }
@@ -105,18 +109,18 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         mSupportActionBar.setTitle(mRecipe.getName() + " - " + mStep.getShortDescription());
 
-        if(mStepIndex == 0) {
-            mPreviousButton.setEnabled(false);
-        }
-        else {
-            mPreviousButton.setEnabled(true);
-        }
+        if(mPreviousButton != null) {
+            if (mStepIndex == 0) {
+                mPreviousButton.setEnabled(false);
+            } else {
+                mPreviousButton.setEnabled(true);
+            }
 
-        if(mStepIndex == mRecipe.getSteps().size()-1) {
-            mNextButton.setEnabled(false);
-        }
-        else {
-            mNextButton.setEnabled(true);
+            if (mStepIndex == mRecipe.getSteps().size() - 1) {
+                mNextButton.setEnabled(false);
+            } else {
+                mNextButton.setEnabled(true);
+            }
         }
     }
 
