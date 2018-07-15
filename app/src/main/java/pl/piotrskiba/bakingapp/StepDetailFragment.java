@@ -1,6 +1,5 @@
 package pl.piotrskiba.bakingapp;
 
-import android.app.ActionBar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -94,6 +93,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     public void updateUI(){
         mStep = mRecipe.getSteps().get(mStepIndex);
+
+        releasePlayer();
 
         if(mStepDescriptionTextView != null)
             mStepDescriptionTextView.setText(mStep.getDescription());
