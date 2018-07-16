@@ -16,6 +16,7 @@
     <!-- step_list_item.xml -->
     <dimen name="step_title_text_size">20sp</dimen>
     <dimen name="step_title_margin">8dp</dimen>
+    <dimen name="image_height">100dp</dimen>
 
     <!-- fragment_step_detail.xml -->
     <dimen name="step_description_margin">8dp</dimen>

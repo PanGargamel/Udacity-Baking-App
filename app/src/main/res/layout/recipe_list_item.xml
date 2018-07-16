@@ -10,6 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/card_content_margin"
         android:layout_marginBottom="@dimen/card_content_margin">
+        <ImageView
+            android:id="@+id/iv_recipe_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_height"
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/tv_recipe_name"
             android:layout_width="match_parent"

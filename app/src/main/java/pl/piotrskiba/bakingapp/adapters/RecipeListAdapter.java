@@ -3,10 +3,14 @@ package pl.piotrskiba.bakingapp.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,6 +46,20 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
 
+        // set recipe image
+        if(!TextUtils.isEmpty(recipeList.get(position).getImage())){
+            Picasso.get()
+                    .load(recipeList.get(position).getImage())
+                    .placeholder(R.drawable.ic_image_black_24dp)
+                    .error(R.drawable.ic_broken_image_black_24dp)
+                    .into(holder.mRecipeImage);
+
+            holder.mRecipeImage.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.mRecipeImage.setVisibility(View.GONE);
+        }
+
         // set recipe name
         holder.recipeNameTextView.setText(recipeList.get(position).getName());
 
@@ -66,6 +84,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        @BindView(R.id.iv_recipe_image)
+        ImageView mRecipeImage;
 
         @BindView(R.id.tv_recipe_name)
         TextView recipeNameTextView;
