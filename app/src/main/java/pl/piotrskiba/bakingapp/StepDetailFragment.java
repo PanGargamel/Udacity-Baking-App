@@ -56,6 +56,12 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     public final static String TAG = "FRAGMENT_STEP_DETAIL";
 
+    public final static String KEY_VIDEO_POSITION = "video_position";
+    public final static String KEY_PLAY_WHEN_READY = "video_play_when_ready";
+
+    private long mVideoPos = 0;
+    private boolean mPlayWhenReady = false;
+
     public StepDetailFragment(){
 
     }
@@ -74,6 +80,14 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         if (mPreviousButton != null) {
             mPreviousButton.setOnClickListener(this);
             mNextButton.setOnClickListener(this);
+        }
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY_VIDEO_POSITION)){
+            long videoPos = savedInstanceState.getLong(KEY_VIDEO_POSITION);
+            boolean playWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+
+            mVideoPos = videoPos;
+            mPlayWhenReady = playWhenReady;
         }
 
         return rootView;
@@ -102,6 +116,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         if(mStep.getVideoUrl().length() != 0) {
             initializeVideoPlayer(Uri.parse(mStep.getVideoUrl()));
             mStepVideoPlayerView.setVisibility(View.VISIBLE);
+
+            // restore video position
+            mStepVideoPlayer.seekTo(mVideoPos);
+            mStepVideoPlayer.setPlayWhenReady(mPlayWhenReady);
         }
         else{
             // there's no video, so hide the player
@@ -145,8 +163,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         releasePlayer();
     }
 
@@ -166,5 +184,13 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             setStepIndex(mStepIndex + 1);
             updateUI();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong(KEY_VIDEO_POSITION, mStepVideoPlayer.getCurrentPosition());
+        outState.putBoolean(KEY_PLAY_WHEN_READY, mStepVideoPlayer.getPlayWhenReady());
+
+        super.onSaveInstanceState(outState);
     }
 }
