@@ -215,8 +215,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(KEY_VIDEO_POSITION, mStepVideoPlayer.getCurrentPosition());
-        outState.putBoolean(KEY_PLAY_WHEN_READY, mStepVideoPlayer.getPlayWhenReady());
+        if(mStepVideoPlayer != null) {
+            outState.putLong(KEY_VIDEO_POSITION, mStepVideoPlayer.getCurrentPosition());
+            outState.putBoolean(KEY_PLAY_WHEN_READY, mStepVideoPlayer.getPlayWhenReady());
+        }
 
         super.onSaveInstanceState(outState);
     }
