@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -23,6 +25,9 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +35,10 @@ import pl.piotrskiba.bakingapp.models.Recipe;
 import pl.piotrskiba.bakingapp.models.Step;
 
 public class StepDetailFragment extends Fragment implements View.OnClickListener {
+
+    @BindView(R.id.iv_thumbnail)
+    @Nullable
+    ImageView mStepThumbnail;
 
     @BindView(R.id.tv_step_description)
     @Nullable
@@ -110,10 +119,27 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         releasePlayer();
 
+        // load step description
         if(mStepDescriptionTextView != null)
             mStepDescriptionTextView.setText(mStep.getDescription());
 
-        if(mStep.getVideoUrl().length() != 0) {
+        // load step thumbnail
+        if(mStepThumbnail != null) {
+            if (!TextUtils.isEmpty(mStep.getThumbnailUrl())) {
+                Picasso.get()
+                        .load(mStep.getThumbnailUrl())
+                        .placeholder(R.drawable.ic_image_black_24dp)
+                        .error(R.drawable.ic_broken_image_black_24dp)
+                        .into(mStepThumbnail);
+
+                mStepThumbnail.setVisibility(View.VISIBLE);
+            } else {
+                mStepThumbnail.setVisibility(View.GONE);
+            }
+        }
+
+        // load step movie
+        if(!TextUtils.isEmpty(mStep.getVideoUrl())) {
             initializeVideoPlayer(Uri.parse(mStep.getVideoUrl()));
             mStepVideoPlayerView.setVisibility(View.VISIBLE);
 
@@ -128,6 +154,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         mSupportActionBar.setTitle(mRecipe.getName() + " - " + mStep.getShortDescription());
 
+        // enable/disable buttons
         if(mPreviousButton != null) {
             if (mStepIndex == 0) {
                 mPreviousButton.setEnabled(false);
