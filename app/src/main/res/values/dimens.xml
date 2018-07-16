@@ -19,7 +19,7 @@
 
     <!-- fragment_step_detail.xml -->
     <dimen name="step_description_margin">8dp</dimen>
-    <dimen name="thumbnail_height">200dp</dimen>
+    <dimen name="thumbnail_height">180dp</dimen>
     <dimen name="video_height">204dp</dimen>
     <dimen name="button_width">140dp</dimen>
 
