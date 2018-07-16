@@ -12,6 +12,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,6 +34,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements RecipeListAdapter.ListItemClickListener {
+
+    @BindView(R.id.pb_loading)
+    ProgressBar mLoadingIndicator;
 
     @BindView(R.id.rv_recipes)
     RecyclerView mRecipeList;
@@ -49,6 +57,13 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
         ButterKnife.bind(this);
 
+        loadData();
+    }
+
+    private void loadData(){
+
+        showLoadingIndicator();
+
         /*
             Get Recipe List using Retrofit
             created basing on this tutorial:
@@ -63,14 +78,26 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 mRecipes = response.body();
                 setupRecyclerView(mRecipes);
+                hideLoadingIndicator();
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
                 Log.w(getClass().getSimpleName(), t.getMessage());
+                hideLoadingIndicator();
             }
         });
+    }
+
+    private void showLoadingIndicator(){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        mRecipeList.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideLoadingIndicator(){
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mRecipeList.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -137,5 +164,21 @@ public class MainActivity extends AppCompatActivity implements RecipeListAdapter
 
             finish();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        loadData();
+        Toast.makeText(this, getString(R.string.refreshing), Toast.LENGTH_SHORT).show();
+
+        return super.onOptionsItemSelected(item);
     }
 }
